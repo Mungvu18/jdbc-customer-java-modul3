@@ -62,7 +62,7 @@ public class CustomerService implements ICustomerService{
             preparedStatement.setString(2,customer.getName());
             preparedStatement.setString(3, customer.getAddress());
             // thực hiện truy vấn thông qua đối tượng try vấn
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -72,18 +72,8 @@ public class CustomerService implements ICustomerService{
     @Override
     public Customer findById(int id) {
         Customer customer = null;
-        Connection connection = null;
-        // tạo một đối tượng Connection để kết nối vơi jdbc
-        //b1: tai driver
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            // b2: kết nối với đường dẫn cơ sở dữ liệu
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/customerManager");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        Connection connection = getConnection();
+
         // tạo đối tượng truy vấn
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("select * from customers where id=?");
@@ -131,7 +121,7 @@ public class CustomerService implements ICustomerService{
             // sét lại tuộc tính
             preparedStatement.setInt(1,id);
             // thực hiện câu lệnh truy vấn
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
